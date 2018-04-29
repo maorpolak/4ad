@@ -1,0 +1,22 @@
+textarea {
+    text-align: left !important;
+}
+
+#saveGameFormBtn {
+    position: fixed;
+    top: 18px;
+    right: 175px;
+}
+
+#partySheet {
+    background-image: url('./images/swords.png');
+    background-repeat: repeat;
+}
+
+#monsterKillForm {
+    margin-bottom: 50px;
+}
+
+.delete-monster-btn {
+    cursor: pointer;
+}
