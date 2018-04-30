@@ -5,7 +5,7 @@
     <div class="col-md-12" id="partySheet">
         <div class="row">
             <div class="col-md-12 text-center">
-                <h1 class="lead">Party Sheet</h1>
+                <h1 class="lead">Play Sheet</h1>
             </div>
             <form id="gameForm" data-api-call="/game{{ isset($game) ? "/$game->id" : '' }}" data-method="POST" data-reset-form="false" class="form-horizontal">
                 {!! Form::hidden('game_id', $game->id, ['id' => 'gameId']) !!}
@@ -31,7 +31,7 @@
                 <h2 class="lead">Monsters Killed</h2>
             </div>
             <div class="col-md-12">
-                <table class="table table-responsive" id="monstersKilledTable">
+                <table class="table table-responsive table-striped" id="monstersKilledTable">
                     <tr>
                         <th>Name</th>
                         <th>Type</th>
