@@ -11,31 +11,54 @@
         var baseUrl = $('meta[name="baseUrl"]').attr('content');
         var token = $('meta[name="csrfToken"]').attr('content');
 
-        $('#newGameForm').on('submit', submitForm);
+        $('#newGameForm').on('submit', { callback: updateCampaignsTable }, submitForm);
         $('#gameForm').on('submit', submitForm);
         $('#monsterKillForm').on('submit', { callback: updateMonstersKilledTable }, submitForm);
         updateMonstersKilledTable();
+        updateCampaignsTable();
+
+        function updateCampaignsTable() {
+            var $campaignsTable = $('#campaignsTable');
+
+            if ($campaignsTable.length) {
+                $campaignsTable.find('tr:not(:first)').remove();
+                sendRequest('/game/all', 'GET').then(function (campaigns) {
+
+                    for (var i = 0; i < campaigns.length; i++) {
+                        var $row = $('<tr>').appendTo($campaignsTable);
+                        var $link = $('<a>', {
+                            href: baseUrl + '/game/' + campaigns[i].id
+                        }).text(campaigns[i].name);
+
+                        $('<td>').text(campaigns[i].id).appendTo($row);
+                        $('<td>').html($link).appendTo($row);
+                    }
+                });
+            }
+        }
 
         function updateMonstersKilledTable() {
             var gameId = $('#gameId').val();
             var $monstersKilledTable = $('#monstersKilledTable');
-            $monstersKilledTable.find('tr:not(:first)').remove();
-            sendRequest('/game/monsterKilled/' + gameId, 'GET').then(function (monsters) {
 
+            if ($monstersKilledTable.length) {
+                $monstersKilledTable.find('tr:not(:first)').remove();
+                sendRequest('/game/monsterKilled/' + gameId, 'GET').then(function (monsters) {
 
-                for (var i = 0; i < monsters.length; i++) {
-                    var $row = $('<tr>').appendTo($monstersKilledTable);
-                    var $deleteMonsterBtn = $('<span>', {
-                        class: 'delete-monster-btn'
-                    }).text('X').on('click', { monsterId: monsters[i].id }, deleteMonsterKilled);
+                    for (var i = 0; i < monsters.length; i++) {
+                        var $row = $('<tr>').appendTo($monstersKilledTable);
+                        var $deleteMonsterBtn = $('<span>', {
+                            class: 'delete-monster-btn'
+                        }).text('X').on('click', { monsterId: monsters[i].id }, deleteMonsterKilled);
 
-                    $('<td>').text(monsters[i].name).appendTo($row);
-                    $('<td>').text(monsters[i].type).appendTo($row);
-                    $('<td>').text(monsters[i].number).appendTo($row);
-                    $('<td>').text(monsters[i].comments).appendTo($row);
-                    $('<td>').html($deleteMonsterBtn).appendTo($row);
-                }
-            });
+                        $('<td>').text(monsters[i].name).appendTo($row);
+                        $('<td>').text(monsters[i].type).appendTo($row);
+                        $('<td>').text(monsters[i].number).appendTo($row);
+                        $('<td>').text(monsters[i].comments).appendTo($row);
+                        $('<td>').html($deleteMonsterBtn).appendTo($row);
+                    }
+                });
+            }
         }
 
         function deleteMonsterKilled(event) {

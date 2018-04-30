@@ -11,9 +11,14 @@ use Illuminate\Http\Request;
 class GamesController extends Controller {
 
     public function index() {
-        $games = Game::all();
-        return view('games/index', compact('games'));
+        return view('games/index');
     }
+
+    public function getAll() {
+        $games = Game::all();
+        return response()->json($games);
+    }
+
 
     public function store(Request $request) {
         $request->validate([
